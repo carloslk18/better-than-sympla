@@ -1,12 +1,12 @@
 # 🧠 KernelBlog
 
-Blog colaborativo feito por devs apaixonados por tecnologia — um espaço onde compartilhamos tudo sobre **Development**, **Cyber Security**, **Game Developer** e muito mais!
+Blog colaborativo feito por devs apaixonados por tecnologia - um espaço onde compartilhamos tudo sobre **Development**, **Cyber Security**, **Game Development** e muito mais!
 
 ---
 
 ## 📌 Sobre o projeto
 
-O **KernelBlog** é um blog de artigos técnicos construído com foco em na prática e colaboração entre amigos desenvolvedores. Cada autor tem uma conta de administrador e pode publicar, editar ou remover seus artigos.
+O **KernelBlog** é um blog de artigos técnicos construído com foco na prática e colaboração entre amigos desenvolvedores. Cada autor tem uma conta de administrador e pode publicar, editar ou remover seus artigos.
 
 Este projeto está sendo desenvolvido de forma puramente **prática e incremental**, com o objetivo de colocar absorver conceitos de:
 
@@ -22,12 +22,13 @@ Este projeto está sendo desenvolvido de forma puramente **prática e incrementa
 
 ## 🚀 Tecnologias usadas
 
-| Camada         | Stack                                 |
+| Camada         | Stack                                  |
 |----------------|----------------------------------------|
 | Frontend       | Blazor WebAssembly                     |
-| Backend        | ASP.NET Core + EF Core                 |
+| Backend        | ASP.NET Core                           |
+| ORM            | EF + Dapper                            |
 | Banco de Dados | SQLite                                 |
-| Controle de Versão | Git + GitHub                       |
+| Ver Control    | Git + GitHub                           |
 
 ---
 
