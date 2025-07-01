@@ -1,4 +1,4 @@
-# 🧠 KernelBlog
+# 🧠 Kernel Blog
 
 Blog colaborativo feito por devs apaixonados por tecnologia - um espaço onde compartilhamos tudo sobre **Development**, **Cyber Security**, **Game Development** e muito mais!
 
@@ -6,7 +6,7 @@ Blog colaborativo feito por devs apaixonados por tecnologia - um espaço onde co
 
 ## 📌 Sobre o projeto
 
-O **KernelBlog** é um blog de artigos técnicos construído com foco na prática e colaboração entre amigos desenvolvedores. Cada autor tem uma conta de administrador e pode publicar, editar ou remover seus artigos.
+O **Kernel Blog** é um blog de artigos técnicos construído com foco na prática e colaboração entre amigos desenvolvedores. Cada autor tem uma conta de administrador e pode publicar, editar ou remover seus artigos.
 
 Este projeto está sendo desenvolvido de forma puramente **prática e incremental**, com o objetivo de colocar absorver conceitos de:
 
@@ -66,4 +66,4 @@ dotnet run
 ```
 ---
 ## 📢 Em construção...
-Este repositório está em desenvolvimento constante. Fique à vontade para acompanhar, sugerir melhorias ou contribuir!
+Este repositório está em desenvolvimento constante. Fique à vontade para acompanhar, sugerir melhorias ou contribuir.
