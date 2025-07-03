@@ -1,6 +1,6 @@
 # 🧠 Kernel Blog
 
-Collaborative tech blog built by passionate devs—a space to share knowledge about **Development**, **CyberSec**, **DevOps**, **GameDev**, and more!
+Collaborative tech blog built by passionate devs space to share knowledge about **Development**, **CyberSec**, **DevOps**, **GameDev**, and more!
 
 ---
 
