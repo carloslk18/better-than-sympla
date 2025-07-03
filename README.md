@@ -1,38 +1,37 @@
 # 🧠 Kernel Blog
 
-Blog colaborativo feito por devs apaixonados por tecnologia - um espaço onde compartilhamos tudo sobre **Development**, **Cyber Security**, **Game Development** e muito mais!
+Collaborative tech blog built by passionate devs—a space to share knowledge about **Development**, **CyberSec**, **DevOps**, **GameDev**, and more!
 
 ---
 
-## 📌 Sobre o projeto
+## 📌 About
 
-O **Kernel Blog** é um blog de artigos técnicos construído com foco na prática e colaboração entre amigos desenvolvedores. Cada autor tem uma conta de administrador e pode publicar, editar ou remover seus artigos.
+**KernelPanic** is a collaborative technical blog made for learning and sharing. Each author has their own admin account and can publish, edit, or delete articles.  
+This project is built incrementally, showcasing practical implementation:
 
-Este projeto está sendo desenvolvido de forma puramente **prática e incremental**, com o objetivo de colocar absorver conceitos de:
-
-- ASP.NET Core (Web API)
-- Blazor (Interface Web)
-- Entity Framework (ORM)
-- SQLite
-- Estrutura organizada por responsabilidade (MVC)
-- Padrão REST
-- Code First
-
----
-
-## 🚀 Tecnologias usadas
-
-| Camada         | Stack                                  |
-|----------------|----------------------------------------|
-| Frontend       | Blazor WebAssembly                     |
-| Backend        | ASP.NET Core                           |
-| ORM            | EF + Dapper                            |
-| Banco de Dados | SQLite                                 |
-| Ver Control    | Git + GitHub                           |
+- ASP.NET Core Web API
+- React + Next.js
+- JavaScript / TypeScript
+- Entity Framework Core (Code First)
+- Organized folder structure: Models, Controllers, Data.
+- SQLite as a lightweight development database
+- Git flow, branching and pull requests
 
 ---
 
-## 📂 Estrutura do projeto
+## 🚀 Stack
+
+| Layer         | Tech                                       |
+|---------------|--------------------------------------------|
+| Frontend      | Next.js + TypeScript                       |
+| Backend       | ASP.NET Core (Web API)                     |
+| ORM           | EF Core + Dapper                           |
+| Database      | SQLite                                     |
+| Version Ctrl. | Git + GitHub                               |
+
+---
+
+## 📂 Project Sctructure
 
 ```bash
 KernelBlog.sln
@@ -42,28 +41,33 @@ KernelBlog.sln
 │   ├── Data/                    
 │   ├── Models/                  
 │   ├── Program.cs               
-│   └── appsettings.json          
-│
-├── Migrations/                   
+│   ├── appsettings.json
+|   └── Migrations/         
+│                  
 ├── kernelblog.db                
 └── README.md                    
 ```
 ---
 
-## ⚙️ Como rodar o projeto localmente
+## ⚙️ Getting Started Locally
 
 ```bash
-# Clonar o repositório
+# Clone the repo
 git clone https://github.com/carloslk18/kernel-panic-blog.git
 
 cd kernel-panic-blog/KernelBlog.API
 
-# Restaurar os pacotes
+# Restore dependencies
 dotnet restore
 
-# Rodar a aplicação
+# Run the API
 dotnet run
 ```
 ---
-## 📢 Em construção...
-Este repositório está em desenvolvimento constante. Fique à vontade para acompanhar, sugerir melhorias ou contribuir.
+
+## 🧪 Database Setup
+
+```bash
+dotnet ef migrations add SomeMigrationName
+dotnet ef database update
+```
