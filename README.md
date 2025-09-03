@@ -17,6 +17,7 @@ This project is built incrementally, showcasing practical implementation:
 - SQLite as a lightweight development database
 - Git flow, branching and pull requests
 
+
 ---
 
 ## 🚀 Stack
