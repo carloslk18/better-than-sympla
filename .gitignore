@@ -1,0 +1,79 @@
+# =========================
+# Build
+# =========================
+bin/
+obj/
+out/
+build/
+dist/
+
+# =========================
+# .NET
+# =========================
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Rider
+.idea/
+
+# =========================
+# Visual Studio
+# =========================
+.vs/
+
+# =========================
+# VS Code
+# =========================
+.vscode/
+
+# =========================
+# Logs
+# =========================
+logs/
+*.log
+
+# =========================
+# Environment / Secrets
+# =========================
+.env
+.env.*
+*.env
+appsettings.Development.json
+secrets.json
+
+# =========================
+# Database
+# =========================
+*.db
+*.sqlite
+*.sqlite3
+
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Docker
+# =========================
+docker-compose.override.yml
+
+# =========================
+# Coverage / Tests
+# =========================
+coverage/
+TestResults/
+
+# =========================
+# Temporary files
+# =========================
+*.tmp
+*.temp
+*.cache
