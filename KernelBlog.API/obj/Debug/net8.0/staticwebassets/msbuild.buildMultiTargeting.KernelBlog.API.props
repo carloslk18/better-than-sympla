@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\KernelBlog.API.props" />
-</Project>
