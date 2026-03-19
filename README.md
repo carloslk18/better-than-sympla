@@ -8,7 +8,7 @@ Today, most platforms focus mainly on **ticket sales**, while event discovery ha
 
 BTFS aims to change that by becoming a **central hub for discovering events**.
 
---
+---
 
 ## Project Vision
 
