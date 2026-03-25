@@ -43,7 +43,7 @@ Future improvements may include:
 
 ---
 
-## Project Structure
+## Structure
 
 ```bash
 better-than-sympla
