@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/backend/">
+    <Project Path="backend/Btfs.Api/Btfs.Api.csproj" />
+    <Project Path="backend/Btfs.Application/Btfs.Application.csproj" />
+    <Project Path="backend/Btfs.Domain/Btfs.Domain.csproj" />
+    <Project Path="backend/Btfs.Infrastructure/Btfs.Infrastructure.csproj" />
+  </Folder>
+</Solution>
