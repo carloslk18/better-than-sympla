@@ -159,7 +159,7 @@ public class EventService
         ];
     }
 
-    public Task<List<Event>> GetEventsAsync(string? categoryFilter = null, string? searchTerm = null)
+    public Task<List<Event>> GetEventsAsync(string? categoryFilter = null, string? searchTerm = null, string? sortBy = null)
     {
         var query = _events.AsEnumerable();
 
@@ -170,6 +170,16 @@ public class EventService
             query = query.Where(e => e.Title.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
                                   || e.Description.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
                                   || e.Location?.City.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) == true);
+
+        query = sortBy switch
+        {
+            "price_asc" => query.OrderBy(e => e.TicketTypes.Any() ? e.TicketTypes.Min(t => t.Price) : 0),
+            "price_desc" => query.OrderByDescending(e => e.TicketTypes.Any() ? e.TicketTypes.Min(t => t.Price) : 0),
+            "name_asc" => query.OrderBy(e => e.Title),
+            "name_desc" => query.OrderByDescending(e => e.Title),
+            "newest" => query.OrderByDescending(e => e.CreatedAt),
+            _ => query.OrderByDescending(e => e.CreatedAt)
+        };
 
         return Task.FromResult(query.ToList());
     }

@@ -26,6 +26,19 @@
             </div>
 
             <div class="filter-group">
+                <label class="filter-label">Ordenar por</label>
+                <div class="sort-box">
+                    <select class="sort-select" @onchange="OnSortChange">
+                        <option value="newest">Mais Recentes</option>
+                        <option value="price_asc">Preço: Menor para Maior</option>
+                        <option value="price_desc">Preço: Maior para Menor</option>
+                        <option value="name_asc">Nome: A-Z</option>
+                        <option value="name_desc">Nome: Z-A</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="filter-group">
                 <label class="filter-label">Categorias</label>
                 <div class="category-list">
                     <button class="category-item @(selectedCategory == "Todos" ? "category-item--active" : "")" 
@@ -93,6 +106,7 @@
 
     private string searchTerm = "";
     private string selectedCategory = "Todos";
+    private string sortBy = "newest";
 
     protected override async Task OnInitializedAsync()
     {
@@ -103,8 +117,14 @@
     private async Task LoadEvents()
     {
         isLoading = true;
-        events = await EventSvc.GetEventsAsync(selectedCategory, searchTerm);
+        events = await EventSvc.GetEventsAsync(selectedCategory, searchTerm, sortBy);
         isLoading = false;
+    }
+
+    private async Task OnSortChange(ChangeEventArgs e)
+    {
+        sortBy = e.Value?.ToString() ?? "newest";
+        await LoadEvents();
     }
 
     private async Task FilterByCategory(string category)
