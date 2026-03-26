@@ -145,8 +145,10 @@
     gap: var(--space-6);
 }
 
-/* Cart Summary Fixo na base no mobile, bloco no desktop */
-.cart-summary {
+/* Cart Summary Fixo – removido do MVP 1 */
+
+/* ── Ticket Info Card (sidebar informativa) ───────────── */
+.ticket-info-card {
     background: var(--color-bg-elevated);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
@@ -155,69 +157,30 @@
     flex-direction: column;
     gap: var(--space-4);
     box-shadow: var(--shadow-md);
-    transition: transform var(--duration), opacity var(--duration);
 }
 
-.cart-summary__details {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-1);
-}
-
-.cart-summary__items {
-    font-size: var(--text-sm);
-    color: var(--color-text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-.cart-summary__total {
-    font-size: var(--text-3xl);
+.ticket-info-card__title {
+    font-size: var(--text-lg);
     font-family: var(--font-heading);
+    color: var(--color-text);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.ticket-info-card__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-2) 0;
+}
+
+.ticket-info-card__name {
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+}
+
+.ticket-info-card__price {
+    font-size: var(--text-base);
+    font-weight: 700;
     color: var(--color-primary);
-    font-weight: 800;
-}
-
-.cart-summary__btn {
-    width: 100%;
-}
-
-/* Responsivo para Resumo no Mobile (Sticky Bottom Bar) */
-@media (max-width: 1023px) {
-    .cart-summary {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        z-index: 50;
-        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-        border-bottom: none;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        padding: var(--space-4) var(--space-6);
-        background: rgba(26, 28, 50, 0.95);
-        backdrop-filter: blur(12px);
-        transform: translateY(100%);
-        opacity: 0;
-    }
-
-    .cart-summary--active {
-        transform: translateY(0);
-        opacity: 1;
-    }
-
-    .cart-summary__total {
-        font-size: var(--text-xl);
-    }
-    
-    .cart-summary__btn {
-        width: auto;
-        min-width: 140px;
-    }
-    
-    /* Evita que o sumário esconda o conteúdo no final da página */
-    .event-body {
-        padding-bottom: 120px;
-    }
 }
