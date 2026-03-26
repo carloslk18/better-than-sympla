@@ -2,7 +2,6 @@
 @using Btfs.Models
 @using Btfs.Services
 @inject EventService EventSvc
-@inject CartService Cart
 @inject NavigationManager Nav
 
 <PageTitle>@(Evt?.Title ?? "Carregando...") - BTFS</PageTitle>
@@ -61,7 +60,7 @@ else
     <!-- ── 2. Conteúdo Principal e Sidebar ──────────────────────── -->
     <div class="container event-body section">
         <div class="event-layout animate-slide-up stagger-3">
-            
+
             <!-- Coluna Principal (Info) -->
             <main class="event-main">
                 <section class="event-section">
@@ -86,28 +85,28 @@ else
                     {
                         <div class="venue-card">
                             <h3 class="venue-card__name">Evento Online</h3>
-                            <p class="venue-card__address">O link de acesso será enviado após a confirmação da compra.</p>
+                            <p class="venue-card__address">O link de acesso será enviado após a confirmação.</p>
                         </div>
                     }
                 </section>
             </main>
 
-            <!-- Sidebar (Ingressos) -->
+            <!-- Sidebar (Ingressos – informativo) -->
             <aside class="event-sidebar">
                 <div class="sidebar-sticky-wrapper">
-                    <!-- Componente de Seleção de Lotes -->
-                    <TicketSelector TicketTypes="@Evt.TicketTypes" />
-
-                    <!-- Resumo Fixo do Carrinho nesta página -->
-                    <div class="cart-summary @(Cart.TotalItems > 0 ? "cart-summary--active" : "")">
-                        <div class="cart-summary__details">
-                            <span class="cart-summary__items">@Cart.TotalItems Ingresso@(Cart.TotalItems > 1 ? "s" : "")</span>
-                            <span class="cart-summary__total">@Cart.TotalPriceDisplay</span>
-                        </div>
-                        <button class="btn btn--primary btn--lg cart-summary__btn" 
-                                disabled="@(Cart.TotalItems == 0 || Evt.IsCancelled)"
-                                @onclick="GoToCheckout">
-                            Comprar Agora
+                    <div class="ticket-info-card">
+                        <h3 class="ticket-info-card__title">Ingressos</h3>
+                        @foreach (var ticket in Evt.TicketTypes)
+                        {
+                            <div class="ticket-info-card__item">
+                                <div class="ticket-info-card__name">@ticket.Name</div>
+                                <div class="ticket-info-card__price">
+                                    @(ticket.Price == 0 ? "Grátis" : $"R$ {ticket.Price:N2}")
+                                </div>
+                            </div>
+                        }
+                        <button class="btn btn--primary btn--lg" style="width:100%; margin-top: var(--space-4);" disabled>
+                            Em breve
                         </button>
                     </div>
                 </div>
@@ -127,21 +126,5 @@ else
     {
         Evt = await EventSvc.GetEventByIdAsync(Id);
         isLoading = false;
-        
-        // Assina mudanças no carrinho para atualizar o Resumo Fixo
-        Cart.OnChange += StateHasChanged;
-    }
-
-    public void Dispose()
-    {
-        Cart.OnChange -= StateHasChanged;
-    }
-
-    private void GoToCheckout()
-    {
-        if (Cart.TotalItems > 0)
-        {
-            Nav.NavigateTo("/checkout");
-        }
     }
 }

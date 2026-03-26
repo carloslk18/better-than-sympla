@@ -12,7 +12,6 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 // Dados mock — troque por HttpClient quando a API estiver pronta
 builder.Services.AddSingleton<EventService>();
 
-// Estado do carrinho persiste durante a sessão do browser
-builder.Services.AddScoped<CartService>();
+
 
 await builder.Build().RunAsync();
