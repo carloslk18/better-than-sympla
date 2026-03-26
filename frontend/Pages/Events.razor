@@ -1,0 +1,55 @@
+@page "/eventos"
+@using Btfs.Models
+@using Btfs.Services
+@inject EventService EventSvc
+
+<div class="events-page container animate-fade-in">
+    <header class="events-page__header">
+        <h1 class="events-page__title">Todos os Eventos</h1>
+        <p class="events-page__subtitle">Explore o que está acontecendo ao seu redor.</p>
+    </header>
+
+    @if (isLoading)
+    {
+        <div class="events-grid">
+            @for (var i = 0; i < 8; i++)
+            {
+                <div class="event-card-skeleton">
+                    <div class="skeleton skeleton--image"></div>
+                    <div class="skeleton-body">
+                        <div class="skeleton skeleton--text"></div>
+                        <div class="skeleton skeleton--text"></div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else if (events.Count == 0)
+    {
+        <div class="empty-state">
+            <span class="empty-state__icon">📭</span>
+            <h3 class="empty-state__title">Nenhum evento no momento</h3>
+            <p class="empty-state__text">Fique de olho! Novas experiências chegam todos os dias.</p>
+        </div>
+    }
+    else
+    {
+        <div class="events-grid">
+            @foreach (var evt in events)
+            {
+                <EventCard Event="evt" />
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private List<Event> events = [];
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        events = await EventSvc.GetEventsAsync();
+        isLoading = false;
+    }
+}

@@ -1,0 +1,179 @@
+@page "/"
+@using Btfs.Models
+@using Btfs.Services
+@inject EventService EventSvc
+
+<!--
+  Home – Página principal do BTFS.
+
+  ESTRUTURA:
+  1. Hero: tipografia gigante + CTA (lembra o Eventis com o título em destaque)
+  2. Filtros: chips de categoria (busca rápida sem redirect)
+  3. Busca: campo de texto com filtro ao digitar
+  4. Grid de eventos: cards responsivos com animação stagger
+-->
+
+<!-- ── 1. Hero ────────────────────────────────────────── -->
+<section class="hero" aria-label="Seção principal">
+    <div class="hero__bg-glow" aria-hidden="true"></div>
+
+
+    <div class="container hero__content">
+
+
+        <h1 class="hero__title animate-fade-in stagger-1">
+            Descubra eventos<br />
+            <span class="hero__title-gradient">incríveis</span> perto de você
+        </h1>
+
+        <p class="hero__subtitle animate-fade-in stagger-2">
+            Shows, festivais, tecnologia, gastronomia e muito mais.<br class="hide-mobile" />
+            Compre seu ingresso em segundos.
+        </p>
+
+        <div class="hero__search animate-fade-in stagger-3">
+            <div class="hero__search-box">
+                <span class="hero__search-icon" aria-hidden="true">🔍</span>
+                <input
+                    type="search"
+                    class="hero__search-input"
+                    placeholder="Buscar eventos, artistas ou cidades..."
+                    @bind="searchTerm"
+                    @bind:event="oninput"
+                    @onkeydown="OnSearchKeyDown"
+                    aria-label="Buscar eventos" />
+            </div>
+            <button class="btn btn--primary btn--lg" @onclick="ApplyFilters">
+                Buscar
+            </button>
+        </div>
+
+
+    </div>
+</section>
+
+<!-- ── 2. Lista de Eventos ────────────────────────── -->
+<section class="discover-section section">
+    <div class="container">
+
+        <!-- ── 3. Cabeçalho da seção + contagem ─────────── -->
+        <div class="section-header">
+            <h2 class="section-title">
+                @if (activeCategory == "Todos" && string.IsNullOrWhiteSpace(searchTerm))
+                {
+                    <text>Eventos em Destaque</text>
+                }
+                else
+                {
+                    <text>@filteredEvents.Count resultado@(filteredEvents.Count != 1 ? "s" : "")</text>
+                }
+            </h2>
+            @if (filteredEvents.Count > 0)
+            {
+                <span class="section-link" aria-live="polite">
+                    @filteredEvents.Count de @allEvents.Count eventos
+                </span>
+            }
+        </div>
+
+        <!-- ── 4. Grid de eventos ──────────────────────── -->
+        @if (isLoading)
+        {
+            <!-- Skeleton: mantém o layout estável enquanto carrega -->
+            <div class="events-grid">
+                @for (var i = 0; i < 8; i++)
+                {
+                    <div class="event-card-skeleton" aria-hidden="true">
+                        <div class="skeleton skeleton--image"></div>
+                        <div class="skeleton-body">
+                            <div class="skeleton skeleton--text skeleton--short"></div>
+                            <div class="skeleton skeleton--text"></div>
+                            <div class="skeleton skeleton--text skeleton--medium"></div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else if (filteredEvents.Count == 0)
+        {
+            <div class="empty-state animate-fade-in" role="status">
+                <div class="empty-state__icon" aria-hidden="true">🔍</div>
+                <h3 class="empty-state__title">Nenhum evento encontrado</h3>
+                <p class="empty-state__text">Tente outra categoria ou termo de busca.</p>
+                <button class="btn btn--outline" @onclick="ResetFilters">
+                    Limpar filtros
+                </button>
+            </div>
+        }
+        else
+        {
+            <div class="events-grid">
+                @{
+                    var staggerIndex = 0;
+                }
+                @foreach (var evt in filteredEvents)
+                {
+                    var staggerClass = $"stagger-{Math.Min(staggerIndex + 1, 6)}";
+                    staggerIndex++;
+                    <EventCard Event="evt" CssClass="@($"animate-fade-in {staggerClass}")" />
+                }
+            </div>
+        }
+    </div>
+</section>
+
+@code {
+    private List<Event> allEvents = [];
+    private List<Event> filteredEvents = [];
+    private List<Category> categories = [];
+    private string activeCategory = "Todos";
+    private string searchTerm = "";
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Carrega categorias e eventos em paralelo
+        var catTask = EventSvc.GetCategoriesAsync();
+        var evtTask = EventSvc.GetEventsAsync();
+
+        await Task.WhenAll(catTask, evtTask);
+
+        categories = catTask.Result;
+        allEvents = evtTask.Result;
+        filteredEvents = allEvents;
+        isLoading = false;
+    }
+
+    private void SetCategory(string category)
+    {
+        activeCategory = category;
+        ApplyFilters();
+    }
+
+    private void OnSearchKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            ApplyFilters();
+        }
+    }
+    private void ApplyFilters()
+    {
+        var catFilter = activeCategory == "Todos" ? null : activeCategory;
+        filteredEvents = allEvents
+            .Where(e =>
+                (catFilter == null || e.Categories.Any(c => c.Name == catFilter)) &&
+                (string.IsNullOrWhiteSpace(searchTerm) ||
+                    e.Title.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                    e.Description.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                    (e.Location?.City.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false)))
+            .ToList();
+    }
+
+    private void ResetFilters()
+    {
+        activeCategory = "Todos";
+        searchTerm = "";
+        filteredEvents = allEvents;
+    }
+}

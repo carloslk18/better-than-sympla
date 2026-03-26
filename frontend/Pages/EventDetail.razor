@@ -1,0 +1,147 @@
+@page "/event/{Id}"
+@using Btfs.Models
+@using Btfs.Services
+@inject EventService EventSvc
+@inject CartService Cart
+@inject NavigationManager Nav
+
+<PageTitle>@(Evt?.Title ?? "Carregando...") - BTFS</PageTitle>
+
+@if (isLoading)
+{
+    <div class="btfs-loading">
+        <div class="btfs-loading__spinner"></div>
+    </div>
+}
+else if (Evt == null)
+{
+    <div class="container section text-center">
+        <h2>Evento não encontrado</h2>
+        <p>Parece que o evento que você está procurando não existe ou foi removido.</p>
+        <button class="btn btn--primary" style="margin-top: var(--space-4);" @onclick='() => Nav.NavigateTo("/")'>Voltar para a Home</button>
+    </div>
+}
+else
+{
+    <!-- ── 1. Event Hero ────────────────────────────────────────── -->
+    <div class="event-hero">
+        <div class="event-hero__bg" style="background-image: url('@Evt.CoverImageUrl');" aria-hidden="true"></div>
+        <div class="event-hero__overlay" aria-hidden="true"></div>
+        <div class="container event-hero__content">
+            <div class="event-hero__badges animate-fade-in">
+                @foreach (var cat in Evt.Categories)
+                {
+                    <span class="badge badge--primary">@cat.Name</span>
+                }
+                @if (Evt.Status == "cancelado")
+                {
+                    <span class="badge badge--error">Cancelado</span>
+                }
+                @if (Evt.IsOnline)
+                {
+                    <span class="badge badge--warning">Online</span>
+                }
+            </div>
+
+            <h1 class="event-hero__title animate-fade-in stagger-1">@Evt.Title</h1>
+
+            <div class="event-hero__meta animate-fade-in stagger-2">
+                <div class="event-hero__meta-item">
+                    <span class="icon">📅</span>
+                    <span>@Evt.DateDisplay</span>
+                </div>
+                <div class="event-hero__meta-item">
+                    <span class="icon">📍</span>
+                    <span>@(Evt.Location?.Name ?? "Evento Online")</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── 2. Conteúdo Principal e Sidebar ──────────────────────── -->
+    <div class="container event-body section">
+        <div class="event-layout animate-slide-up stagger-3">
+            
+            <!-- Coluna Principal (Info) -->
+            <main class="event-main">
+                <section class="event-section">
+                    <h2 class="event-section__title">Sobre o evento</h2>
+                    <div class="event-section__content text-block">
+                        <p>@Evt.Description</p>
+                    </div>
+                </section>
+
+                <section class="event-section">
+                    <h2 class="event-section__title">Local</h2>
+                    @if (Evt.Location != null)
+                    {
+                        <div class="venue-card">
+                            <h3 class="venue-card__name">@Evt.Location.Name</h3>
+                            <p class="venue-card__address">
+                                @Evt.Location.City, @Evt.Location.State
+                            </p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="venue-card">
+                            <h3 class="venue-card__name">Evento Online</h3>
+                            <p class="venue-card__address">O link de acesso será enviado após a confirmação da compra.</p>
+                        </div>
+                    }
+                </section>
+            </main>
+
+            <!-- Sidebar (Ingressos) -->
+            <aside class="event-sidebar">
+                <div class="sidebar-sticky-wrapper">
+                    <!-- Componente de Seleção de Lotes -->
+                    <TicketSelector TicketTypes="@Evt.TicketTypes" />
+
+                    <!-- Resumo Fixo do Carrinho nesta página -->
+                    <div class="cart-summary @(Cart.TotalItems > 0 ? "cart-summary--active" : "")">
+                        <div class="cart-summary__details">
+                            <span class="cart-summary__items">@Cart.TotalItems Ingresso@(Cart.TotalItems > 1 ? "s" : "")</span>
+                            <span class="cart-summary__total">@Cart.TotalPriceDisplay</span>
+                        </div>
+                        <button class="btn btn--primary btn--lg cart-summary__btn" 
+                                disabled="@(Cart.TotalItems == 0 || Evt.IsCancelled)"
+                                @onclick="GoToCheckout">
+                            Comprar Agora
+                        </button>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string Id { get; set; } = "";
+
+    private Event? Evt;
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Evt = await EventSvc.GetEventByIdAsync(Id);
+        isLoading = false;
+        
+        // Assina mudanças no carrinho para atualizar o Resumo Fixo
+        Cart.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        Cart.OnChange -= StateHasChanged;
+    }
+
+    private void GoToCheckout()
+    {
+        if (Cart.TotalItems > 0)
+        {
+            Nav.NavigateTo("/checkout");
+        }
+    }
+}
