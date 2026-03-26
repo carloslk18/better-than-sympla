@@ -1,0 +1,72 @@
+/* ── Events Page ─────────────────────────────────────── */
+.events-page {
+    padding-top: var(--space-20);
+    padding-bottom: var(--space-24);
+}
+
+.events-page__header {
+    text-align: left;
+    margin-bottom: var(--space-12);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.events-page__title {
+    font-family: var(--font-heading);
+    font-size: var(--text-4xl);
+    font-weight: 800;
+    color: var(--color-text);
+}
+
+.events-page__subtitle {
+    font-size: var(--text-lg);
+    color: var(--color-text-muted);
+    max-width: 60ch;
+}
+
+/* Reusa o grid da home ou o grid global */
+.events-grid {
+    display: grid;
+    gap: var(--space-6);
+}
+
+@media (min-width: 640px) {
+    .events-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1024px) {
+    .events-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (min-width: 1280px) {
+    .events-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* Skeleton Loading styles reusados de app.css se possível, ou definidos aqui */
+.event-card-skeleton {
+    background: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    height: 380px; /* Alinhado ao EventCard */
+}
+
+.skeleton {
+    background: linear-gradient(
+        90deg,
+        var(--color-bg-elevated) 25%,
+        rgba(255,255,255,0.04) 50%,
+        var(--color-bg-elevated) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+.skeleton--image { height: 200px; }
+.skeleton-body { padding: var(--space-4); display: flex; flex-direction: column; gap: var(--space-3); }
+.skeleton--text { height: 14px; border-radius: 4px; }
+
+@keyframes shimmer {
+    to { background-position: -200% 0; }
+}

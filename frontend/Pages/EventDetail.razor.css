@@ -1,0 +1,223 @@
+/* ═══════════════════════════════════════════════════════
+   EventDetail – Estilos da página de detalhes do evento
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Hero ─────────────────────────────────────────────── */
+.event-hero {
+    position: relative;
+    padding-top: var(--space-20);
+    padding-bottom: var(--space-12);
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+}
+
+.event-hero__bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 0;
+    filter: blur(2px) brightness(0.7);
+    transform: scale(1.05); /* evita bordas borradas visíveis */
+}
+
+/* Gradiente para garantir leitura do texto sobre a foto */
+.event-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(10, 11, 20, 0.4) 0%,
+        var(--color-bg) 100%
+    );
+    z-index: 1;
+}
+
+.event-hero__content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    max-width: 800px;
+}
+
+.event-hero__badges {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+}
+
+.event-hero__title {
+    font-size: var(--text-4xl);
+    line-height: 1.1;
+    color: #fff;
+    text-shadow: 0 4px 16px rgba(0,0,0,0.5);
+}
+
+.event-hero__meta {
+    display: flex;
+    gap: var(--space-6);
+    flex-wrap: wrap;
+    color: rgba(255,255,255,0.9);
+    font-size: var(--text-base);
+    font-weight: 500;
+}
+
+.event-hero__meta-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+/* ── Layout Principal (Desktop) ───────────────────────── */
+.event-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+}
+
+@media (min-width: 1024px) {
+    .event-layout {
+        grid-template-columns: 2fr 1fr;
+        gap: var(--space-12);
+    }
+}
+
+/* ── Conteúdo Principal ───────────────────────────────── */
+.event-main {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+}
+
+.event-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.event-section__title {
+    font-size: var(--text-2xl);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.text-block p {
+    color: var(--color-text-muted);
+    font-size: var(--text-base);
+    line-height: 1.8;
+}
+
+/* Card de Local */
+.venue-card {
+    background: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+}
+
+.venue-card__name {
+    font-size: var(--text-lg);
+    color: var(--color-text);
+    margin-bottom: var(--space-1);
+}
+
+.venue-card__address {
+    color: var(--color-text-muted);
+}
+
+/* ── Sidebar e Resumo ─────────────────────────────────── */
+.event-sidebar {
+    position: relative;
+}
+
+/* Mantém a sidebar colada no topo ao rolar a página no desktop */
+.sidebar-sticky-wrapper {
+    position: sticky;
+    top: var(--space-8);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+}
+
+/* Cart Summary Fixo na base no mobile, bloco no desktop */
+.cart-summary {
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    box-shadow: var(--shadow-md);
+    transition: transform var(--duration), opacity var(--duration);
+}
+
+.cart-summary__details {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+}
+
+.cart-summary__items {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.cart-summary__total {
+    font-size: var(--text-3xl);
+    font-family: var(--font-heading);
+    color: var(--color-primary);
+    font-weight: 800;
+}
+
+.cart-summary__btn {
+    width: 100%;
+}
+
+/* Responsivo para Resumo no Mobile (Sticky Bottom Bar) */
+@media (max-width: 1023px) {
+    .cart-summary {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 50;
+        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        border-bottom: none;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: var(--space-4) var(--space-6);
+        background: rgba(26, 28, 50, 0.95);
+        backdrop-filter: blur(12px);
+        transform: translateY(100%);
+        opacity: 0;
+    }
+
+    .cart-summary--active {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    .cart-summary__total {
+        font-size: var(--text-xl);
+    }
+    
+    .cart-summary__btn {
+        width: auto;
+        min-width: 140px;
+    }
+    
+    /* Evita que o sumário esconda o conteúdo no final da página */
+    .event-body {
+        padding-bottom: 120px;
+    }
+}

@@ -1,0 +1,47 @@
+@implements IDisposable
+@using Btfs.Services
+@inject CartService Cart
+
+<div class="order-summary">
+    <h3 class="order-summary__title">Resumo do Pedido</h3>
+    
+    @if (Cart.TotalItems == 0)
+    {
+        <p class="order-summary__empty">Seu carrinho está vazio.</p>
+    }
+    else
+    {
+        <ul class="order-summary__list">
+            @foreach (var item in Cart.Items)
+            {
+                <li class="order-summary__item">
+                    <div class="item-info">
+                        <span class="item-name">@item.Ticket.Name</span>
+                        <span class="item-qty">@item.Quantity x @item.Ticket.PriceDisplay</span>
+                    </div>
+                    <div class="item-total">
+                        R$ @((item.Ticket.Price * item.Quantity).ToString("N2"))
+                    </div>
+                </li>
+            }
+        </ul>
+        <div class="order-summary__footer">
+            <div class="footer-row">
+                <span>Total</span>
+                <span class="total-price">@Cart.TotalPriceDisplay</span>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        Cart.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        Cart.OnChange -= StateHasChanged;
+    }
+}

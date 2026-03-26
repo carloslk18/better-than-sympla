@@ -1,0 +1,78 @@
+@inject NavigationManager Nav
+
+<!--
+  NavMenu – barra de navegação estilo Eventis:
+  - Logo à esquerda
+  - Links de navegação no centro (chips pill com glassmorphism)
+  - CTA "Comprar Ingresso" à direita (pill gradiente)
+  - Em mobile: hamburger menu
+-->
+<header class="navbar @(isScrolled ? "navbar--scrolled" : "")">
+    <div class="container navbar__inner">
+
+        <!-- Logo -->
+        <a href="/" class="navbar__logo" aria-label="BTFS – página inicial">
+            <span class="navbar__logo-text">BTFS</span>
+        </a>
+
+        <!-- Nav Links (desktop) -->
+        <nav class="navbar__links" aria-label="Navegação principal">
+            <a href="/" class="navbar__link @(IsActive("/") ? "navbar__link--active" : "")">
+                Explorar
+            </a>
+            <a href="/eventos" class="navbar__link @(IsActive("/eventos") ? "navbar__link--active" : "")">
+                Eventos
+            </a>
+            <a href="/categorias" class="navbar__link @(IsActive("/categorias") ? "navbar__link--active" : "")">
+                Categorias
+            </a>
+            <a href="/para-organizadores" class="navbar__link @(IsActive("/para-organizadores") ? "navbar__link--active" : "")">
+                Organizadores
+            </a>
+        </nav>
+
+        <!-- CTA + Hamburger -->
+        <div class="navbar__actions">
+            <ThemeToggle />
+            <a href="/minha-conta" class="btn btn--ghost btn--sm navbar__account-btn">
+                Minha Conta
+            </a>
+
+            <!-- Hamburger (mobile) -->
+            <button class="navbar__hamburger" @onclick="ToggleMenu"
+                    aria-label="@(menuOpen ? "Fechar menu" : "Abrir menu")"
+                    aria-expanded="@menuOpen">
+                <span class="navbar__hamburger-bar"></span>
+                <span class="navbar__hamburger-bar"></span>
+                <span class="navbar__hamburger-bar"></span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile Dropdown -->
+    @if (menuOpen)
+    {
+        <div class="navbar__mobile-menu" role="navigation" aria-label="Menu mobile">
+            <a href="/" class="navbar__mobile-link" @onclick="CloseMenu">Explorar</a>
+            <a href="/eventos" class="navbar__mobile-link" @onclick="CloseMenu">Eventos</a>
+            <a href="/categorias" class="navbar__mobile-link" @onclick="CloseMenu">Categorias</a>
+            <a href="/para-organizadores" class="navbar__mobile-link" @onclick="CloseMenu">Organizadores</a>
+            <div class="navbar__mobile-cta">
+                <a href="/minha-conta" class="btn btn--primary" style="width:100%; justify-content:center;">
+                    Minha Conta
+                </a>
+            </div>
+        </div>
+    }
+</header>
+
+@code {
+    private bool isScrolled = false;
+    private bool menuOpen = false;
+
+    private bool IsActive(string href) =>
+        Nav.Uri.TrimEnd('/').EndsWith(href.TrimEnd('/'), StringComparison.OrdinalIgnoreCase);
+
+    private void ToggleMenu() => menuOpen = !menuOpen;
+    private void CloseMenu() => menuOpen = false;
+}

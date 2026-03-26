@@ -1,0 +1,127 @@
+@page "/checkout"
+@using Btfs.Services
+@using Btfs.Components
+@inject CartService Cart
+@inject NavigationManager Nav
+
+<PageTitle>Checkout - BTFS</PageTitle>
+
+<div class="checkout-page container section">
+    
+    <div class="checkout-header">
+        <h1 class="checkout-title">Finalize sua compra</h1>
+        <p class="checkout-subtitle">Falta pouco para garantir seus ingressos!</p>
+    </div>
+
+    @if (Cart.TotalItems > 0)
+    {
+        <div class="checkout-layout">
+            <!-- Left Column: Forms -->
+            <div class="checkout-main">
+                <form class="checkout-form" @onsubmit="ProcessOrder">
+                    <!-- Informações do Comprador -->
+                    <section class="form-section">
+                        <h2 class="form-section__title">1. Seus dados</h2>
+                        <div class="form-group">
+                            <label for="buyerName">Nome Completo</label>
+                            <input type="text" id="buyerName" @bind="buyerName" class="form-control" required placeholder="Ex: João da Silva" />
+                        </div>
+                        <div class="form-group">
+                            <label for="buyerEmail">E-mail</label>
+                            <input type="email" id="buyerEmail" @bind="buyerEmail" class="form-control" required placeholder="Ex: joao@email.com" />
+                        </div>
+                    </section>
+
+                    <!-- Pagamento -->
+                    <section class="form-section">
+                        <h2 class="form-section__title">2. Pagamento</h2>
+                        <div class="form-group">
+                            <label>Método de Pagamento</label>
+                            <div class="payment-methods">
+                                <label class="payment-option @(paymentMethod == "pix" ? "payment-option--selected" : "")">
+                                    <input type="radio" name="payment" value="pix" checked="@(paymentMethod == "pix")" @onchange='() => paymentMethod = "pix"' />
+                                    <span class="payment-option__content">
+                                        <span class="icon">💠</span> Pix
+                                    </span>
+                                </label>
+                                <label class="payment-option @(paymentMethod == "credit" ? "payment-option--selected" : "")">
+                                    <input type="radio" name="payment" value="credit" checked="@(paymentMethod == "credit")" @onchange='() => paymentMethod = "credit"' />
+                                    <span class="payment-option__content">
+                                        <span class="icon">💳</span> Cartão
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+
+                        @if (paymentMethod == "credit")
+                        {
+                            <div class="credit-card-details animate-slide-up">
+                                <div class="form-group">
+                                    <label for="cardNumber">Número do Cartão</label>
+                                    <input type="text" id="cardNumber" class="form-control" placeholder="0000 0000 0000 0000" />
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="cardExpiry">Validade</label>
+                                        <input type="text" id="cardExpiry" class="form-control" placeholder="MM/AA" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cardCvv">CVV</label>
+                                        <input type="text" id="cardCvv" class="form-control" placeholder="123" />
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </section>
+
+                    <button type="submit" class="btn btn--primary btn--lg btn--block checkout-submit" disabled="@isProcessing">
+                        @if (isProcessing)
+                        {
+                            <span class="spinner-icon">🔄</span> <span>Processando...</span>
+                        }
+                        else
+                        {
+                            <span>Finalizar Compra</span>
+                        }
+                    </button>
+                </form>
+            </div>
+
+            <!-- Right Column: Summary -->
+            <aside class="checkout-sidebar">
+                <div class="sidebar-sticky-wrapper">
+                    <OrderSummary />
+                </div>
+            </aside>
+        </div>
+    }
+</div>
+
+@code {
+    private string buyerName = "";
+    private string buyerEmail = "";
+    private string paymentMethod = "pix";
+    private bool isProcessing = false;
+
+    protected override void OnInitialized()
+    {
+        if (Cart.TotalItems == 0)
+        {
+            // If cart is empty, redirect to home
+            Nav.NavigateTo("/");
+        }
+    }
+
+    private async Task ProcessOrder()
+    {
+        isProcessing = true;
+        // Simular processamento da compra
+        await Task.Delay(1500);
+        
+        // Limpar o carrinho (em um app real isso ocorreria após sucesso)
+        Cart.Clear();
+
+        // Navegar para a página de confirmação
+        Nav.NavigateTo("/confirmation");
+    }
+}
