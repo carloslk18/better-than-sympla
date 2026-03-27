@@ -1,0 +1,33 @@
+@inject IJSRuntime JS
+
+<button class="theme-toggle" @onclick="ToggleTheme" aria-label="Alternar tema claro/escuro">
+    @if (isDark)
+    {
+        <span class="theme-toggle__icon animate-sun">☀️</span>
+    }
+    else
+    {
+        <span class="theme-toggle__icon animate-moon">🌙</span>
+    }
+</button>
+
+@code {
+    private bool isDark = true;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var theme = await JS.InvokeAsync<string>("themeInterop.getTheme");
+            isDark = theme != "light";
+            StateHasChanged();
+        }
+    }
+
+    private async Task ToggleTheme()
+    {
+        isDark = !isDark;
+        var themeString = isDark ? "dark" : "light";
+        await JS.InvokeVoidAsync("themeInterop.setTheme", themeString);
+    }
+}

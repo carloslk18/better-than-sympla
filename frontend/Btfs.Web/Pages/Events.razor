@@ -1,0 +1,159 @@
+@page "/eventos"
+@using Btfs.Models
+@using Btfs.Services
+@inject EventService EventSvc
+
+<div class="events-page container animate-fade-in">
+    <header class="events-page__header">
+        <h1 class="events-page__title">Todos os Eventos</h1>
+        <p class="events-page__subtitle">Explore o que está acontecendo ao seu redor.</p>
+    </header>
+
+    <div class="events-layout">
+        <!-- Sidebar de Filtros -->
+        <aside class="filters-sidebar">
+            <div class="filter-group">
+                <label class="filter-label">Buscar</label>
+                <div class="search-box">
+                    <span class="search-box__icon">🔍</span>
+                    <input type="text" 
+                           class="search-box__input" 
+                           placeholder="Ex: Lollapalooza..."
+                           @bind="searchTerm" 
+                           @bind:event="oninput" 
+                           @onkeyup="OnFileChange" />
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <label class="filter-label">Ordenar por</label>
+                <div class="sort-box">
+                    <select class="sort-select" @onchange="OnSortChange">
+                        <option value="newest">Mais Recentes</option>
+                        <option value="price_asc">Preço: Menor para Maior</option>
+                        <option value="price_desc">Preço: Maior para Menor</option>
+                        <option value="name_asc">Nome: A-Z</option>
+                        <option value="name_desc">Nome: Z-A</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <label class="filter-label">Categorias</label>
+                <div class="category-list">
+                    <button class="category-item @(selectedCategory == "Todos" ? "category-item--active" : "")" 
+                            @onclick='() => FilterByCategory("Todos")'>
+                        <span class="category-item__icon">🌐</span> Todos
+                    </button>
+                    @foreach (var cat in categories)
+                    {
+                        <button class="category-item @(selectedCategory == cat.Name ? "category-item--active" : "")" 
+                                @onclick='() => FilterByCategory(cat.Name)'>
+                            <span class="category-item__icon">@GetCategoryIcon(cat.Name)</span> @cat.Name
+                        </button>
+                    }
+                </div>
+            </div>
+
+            <div class="filter-group filter-group--footer">
+                <span class="results-badge">@events.Count eventos encontrados</span>
+            </div>
+        </aside>
+
+        <!-- Grid de Resultados -->
+        <main class="events-main">
+            @if (isLoading)
+            {
+                <div class="events-grid">
+                    @for (var i = 0; i < 8; i++)
+                    {
+                        <div class="event-card-skeleton">
+                            <div class="skeleton skeleton--image"></div>
+                            <div class="skeleton-body">
+                                <div class="skeleton skeleton--text"></div>
+                                <div class="skeleton skeleton--text"></div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else if (events.Count == 0)
+            {
+                <div class="empty-state">
+                    <span class="empty-state__icon">📭</span>
+                    <h3 class="empty-state__title">Nenhum evento encontrado</h3>
+                    <p class="empty-state__text">Tente ajustar seus filtros ou buscar por outro termo.</p>
+                    <button class="btn btn--ghost" @onclick="ResetFilters">Limpar Filtros</button>
+                </div>
+            }
+            else
+            {
+                <div class="events-grid">
+                    @foreach (var evt in events)
+                    {
+                        <EventCard Event="evt" />
+                    }
+                </div>
+            }
+        </main>
+    </div>
+</div>
+
+@code {
+    private List<Event> events = [];
+    private List<Category> categories = [];
+    private bool isLoading = true;
+
+    private string searchTerm = "";
+    private string selectedCategory = "Todos";
+    private string sortBy = "newest";
+
+    protected override async Task OnInitializedAsync()
+    {
+        categories = await EventSvc.GetCategoriesAsync();
+        await LoadEvents();
+    }
+
+    private async Task LoadEvents()
+    {
+        isLoading = true;
+        events = await EventSvc.GetEventsAsync(selectedCategory, searchTerm, sortBy);
+        isLoading = false;
+    }
+
+    private async Task OnSortChange(ChangeEventArgs e)
+    {
+        sortBy = e.Value?.ToString() ?? "newest";
+        await LoadEvents();
+    }
+
+    private async Task FilterByCategory(string category)
+    {
+        selectedCategory = category;
+        await LoadEvents();
+    }
+
+    private async Task OnFileChange()
+    {
+        await LoadEvents();
+    }
+
+    private async Task ResetFilters()
+    {
+        searchTerm = "";
+        selectedCategory = "Todos";
+        await LoadEvents();
+    }
+
+    private string GetCategoryIcon(string name) => name switch
+    {
+        "Shows" => "🎸",
+        "Festivais" => "🎡",
+        "Esportes" => "⚽",
+        "Teatro" => "🎭",
+        "Tecnologia" => "💻",
+        "Gastronomia" => "🍕",
+        "Arte" => "🎨",
+        _ => "📍"
+    };
+}
