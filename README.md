@@ -24,7 +24,7 @@ Instead of focusing only on **buying tickets**, the platform focuses on **discov
 
 ---
 
-## Stack
+## Tech Stack
 
 | Layer           | Technology            |
 | --------------- | --------------------- |
@@ -43,7 +43,7 @@ Future improvements may include:
 
 ---
 
-## Structure
+## Project Structure
 
 ```bash
 better-than-sympla
