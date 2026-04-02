@@ -5,7 +5,4 @@
     <Project Path="backend/Btfs.Domain/Btfs.Domain.csproj" />
     <Project Path="backend/Btfs.Infrastructure/Btfs.Infrastructure.csproj" />
   </Folder>
-  <Folder Name="/frontend/">
-    <Project Path="frontend/Btfs.Web/Btfs.Web.csproj" />
-  </Folder>
 </Solution>
